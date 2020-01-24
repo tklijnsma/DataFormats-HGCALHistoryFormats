@@ -1,0 +1,7 @@
+<lcgdict>
+<class name="PCaloHitWithPosition"/>
+<class name="std::vector<PCaloHitWithPosition>"/>
+<class name="edm::Wrapper<std::vector<PCaloHitWithPosition> >"/>
+<class name="edm::Ptr<PCaloHit>"/>
+<class name="edm::Ptr<const PCaloHit>"/>
+</lcgdict>
