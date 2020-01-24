@@ -6,20 +6,16 @@
 #include "RecoLocalCalo/HGCalRecAlgos/interface/RecHitTools.h"
 #include "DataFormats/DetId/interface/DetId.h"
 #include "DataFormats/Common/interface/Ptr.h"
+#include "SimDataFormats/EncodedEventId/interface/EncodedEventId.h"
 
-class PCaloHitWithPosition {
+class PCaloHitWithPosition : public PCaloHit {
     public:
         // Constructor & destructor (default needed)
         inline PCaloHitWithPosition() {}
-        // inline PCaloHitWithPosition(const PCaloHit * fHit) { hit_ = fHit; }
-        inline PCaloHitWithPosition(edm::Ptr<const PCaloHit> fHit){ hit_ = fHit; }
         virtual ~PCaloHitWithPosition() {};
 
-        // const PCaloHit * hit() const { return hit_; }
-        edm::Ptr<const PCaloHit> hit() const { return hit_; }
-
-        void setPositionVars(hgcal::RecHitTools * hgcalRecHitToolInstance){
-            DetId id = hit()->id();
+        void setVars(const PCaloHit * hit, hgcal::RecHitTools * hgcalRecHitToolInstance){
+            DetId id = hit->id();
             position_ = hgcalRecHitToolInstance->getPosition(id);
             zside_ = hgcalRecHitToolInstance->zside(id);
             siThickness_ = hgcalRecHitToolInstance->getSiThickness(id);
@@ -33,14 +29,33 @@ class PCaloHitWithPosition {
             isSilicon_ = hgcalRecHitToolInstance->isSilicon(id);
             eta_ = hgcalRecHitToolInstance->getEta(id);
             phi_ = hgcalRecHitToolInstance->getPhi(id);
-            pt_ = hgcalRecHitToolInstance->getPt(id, hit()->energy());            
+            pt_ = hgcalRecHitToolInstance->getPt(id, hit->energy());
+
+            inEE_ = false;
+            inHsi_ = false;
+            inHsc_ = false;
+            if (id.det() == DetId::HGCalEE){
+                inEE_ = true;
+                }
+            else if (id.det() == DetId::HGCalHSi){
+                inHsi_ = true;
+                }
+            else if (id.det() == DetId::HGCalHSc){
+                inHsc_ = true;
+                }
+
+            // Copy over PCaloHit attributes manually... really depends on 
+            // PCaloHit not changing anytime soon.
+            myEnergy = hit->energy() ;
+            myEMFraction = hit->energyEM() / myEnergy ;
+            myTime = hit->time() ;
+            myItra = hit->geantTrackId() ;
+            detId = hit->id() ;
+            myDepth = hit->depth() ;
+            theEventId = hit->eventId() ;
             }
 
     private:
-        // const PCaloHit * hit_;
-        edm::Ptr<const PCaloHit> hit_;
-        // const PCaloHit> hit_;
-
         GlobalPoint position_;
         int zside_;
         std::float_t siThickness_;
@@ -55,6 +70,10 @@ class PCaloHitWithPosition {
         float eta_;
         float phi_;
         float pt_;
+
+        bool inEE_;
+        bool inHsi_;
+        bool inHsc_;
     };
 
 typedef std::vector<PCaloHitWithPosition> PCaloHitWithPositionCollection;
