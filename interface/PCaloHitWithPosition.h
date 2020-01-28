@@ -14,6 +14,26 @@ class PCaloHitWithPosition : public PCaloHit {
         inline PCaloHitWithPosition() {}
         virtual ~PCaloHitWithPosition() {};
 
+        // Make all attributes public
+        GlobalPoint position_;
+        int zside_;
+        std::float_t siThickness_;
+        std::float_t radiusToSide_;
+        int siThickIndex_;
+        unsigned int layer_;
+        unsigned int layerWithOffset_;
+        std::pair<int, int> wafer_;
+        std::pair<int, int> cell_;
+        bool isHalfCell_;
+        bool isSilicon_;
+        float eta_;
+        float phi_;
+        float pt_;
+        
+        bool inEE_;
+        bool inHsi_;
+        bool inHsc_;
+
         void setVars(const PCaloHit * hit, hgcal::RecHitTools * hgcalRecHitToolInstance){
             DetId id = hit->id();
             position_ = hgcalRecHitToolInstance->getPosition(id);
@@ -56,24 +76,7 @@ class PCaloHitWithPosition : public PCaloHit {
             }
 
     private:
-        GlobalPoint position_;
-        int zside_;
-        std::float_t siThickness_;
-        std::float_t radiusToSide_;
-        int siThickIndex_;
-        unsigned int layer_;
-        unsigned int layerWithOffset_;
-        std::pair<int, int> wafer_;
-        std::pair<int, int> cell_;
-        bool isHalfCell_;
-        bool isSilicon_;
-        float eta_;
-        float phi_;
-        float pt_;
 
-        bool inEE_;
-        bool inHsi_;
-        bool inHsc_;
     };
 
 typedef std::vector<PCaloHitWithPosition> PCaloHitWithPositionCollection;
