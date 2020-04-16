@@ -39,17 +39,20 @@ class PCaloHitWithPosition : public PCaloHit {
             position_ = hgcalRecHitToolInstance->getPosition(id);
             zside_ = hgcalRecHitToolInstance->zside(id);
             siThickness_ = hgcalRecHitToolInstance->getSiThickness(id);
-            radiusToSide_ = hgcalRecHitToolInstance->getRadiusToSide(id);
             siThickIndex_ = hgcalRecHitToolInstance->getSiThickIndex(id);
             layer_ = hgcalRecHitToolInstance->getLayer(id);
             layerWithOffset_ = hgcalRecHitToolInstance->getLayerWithOffset(id);
-            wafer_ = hgcalRecHitToolInstance->getWafer(id);
-            cell_ = hgcalRecHitToolInstance->getCell(id);
             isHalfCell_ = hgcalRecHitToolInstance->isHalfCell(id);
             isSilicon_ = hgcalRecHitToolInstance->isSilicon(id);
             eta_ = hgcalRecHitToolInstance->getEta(id);
             phi_ = hgcalRecHitToolInstance->getPhi(id);
             pt_ = hgcalRecHitToolInstance->getPt(id, hit->energy());
+
+            if (id.det() == DetId::HGCalEE || id.det() == DetId::HGCalHSi){
+                wafer_ = hgcalRecHitToolInstance->getWafer(id);
+                cell_ = hgcalRecHitToolInstance->getCell(id);
+                radiusToSide_ = hgcalRecHitToolInstance->getRadiusToSide(id);
+                }
 
             inEE_ = false;
             inHsi_ = false;
