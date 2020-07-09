@@ -73,6 +73,7 @@ class PCaloHitWithPosition : public PCaloHit {
             myEMFraction = hit->energyEM() / myEnergy ;
             myTime = hit->time() ;
             myItra = hit->geantTrackId() ;
+            mySecondaryItra = hit->geantFineTrackId() ;
             detId = hit->id() ;
             myDepth = hit->depth() ;
             theEventId = hit->eventId() ;
